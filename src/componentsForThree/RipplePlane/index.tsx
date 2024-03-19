@@ -373,7 +373,6 @@ varying vec2 vUv;
 void main() {
   mainImage(gl_FragColor, vUv * iResolution.xy);
 }
-
     `;
 const vertexShader = `
     varying vec2 vUv;

@@ -9,6 +9,7 @@ import Floor from 'componentsForThree/Floor';
 import RipplePlanes from 'componentsForThree/RipplePlane';
 import Rain from 'componentsForThree/Rain';
 import LoadModel from 'componentsForThree/LoadModel';
+import Plasma from 'componentsForThree/Plasma';
 
 export default function Configurator() {
   const ContextBridge = useContextBridge(ControlContext);
@@ -17,7 +18,7 @@ export default function Configurator() {
       <Canvas
         id='scene'
         dpr={[1, 2]}
-        camera={{ fov: 75, position: [0, 30, 0] }}
+        camera={{ fov: 75, position: [0, 30, -17] }}
         style={{ background: '#000000' }}
       >
         <ContextBridge>
@@ -27,7 +28,8 @@ export default function Configurator() {
           <SkyBox />
           {/* <Floor /> */}
           {/* <OrbitControls /> */}
-          <RipplePlanes />
+          {/* <RipplePlanes /> */}
+          <Plasma />
           {/* <Rain /> */}
           {/* <LoadModel modelUrl='assets/model/model.glb' /> */}
         </ContextBridge>
