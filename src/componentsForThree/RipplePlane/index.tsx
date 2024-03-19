@@ -2,6 +2,7 @@ import { Plane, useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import { easing } from 'maath';
 const fragmentShaderTemp = `
 uniform vec3      iResolution;           // viewport resolution (in pixels)
 uniform float     iTime;                 // shader playback time (in seconds)
@@ -10,7 +11,7 @@ uniform float     iFrameRate;            // shader frame rate
 uniform int       iFrame;                // shader playback frame
 uniform float     iChannelTime[4];       // channel playback time (in seconds)
 uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
-uniform vec4      iMouse;                // mouse pixel coords. xy: current (if MLB down), zw: click
+uniform vec2      pointer;                // mouse pixel coords. xy: current (if MLB down), zw: click
 
 uniform sampler2D iChannel0;
 uniform vec4      iDate;                 // (year, month, day, time in seconds)
@@ -94,7 +95,7 @@ const fragmentShader = `
   uniform int       iFrame;                // shader playback frame
   uniform float     iChannelTime[4];       // channel playback time (in seconds)
   uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
-  uniform vec4      iMouse;                // mouse pixel coords. xy: current (if MLB down), zw: click
+  uniform vec4      pointer;                // mouse pixel coords. xy: current (if MLB down), zw: click
   
   uniform sampler2D iChannel0;
   uniform vec4      iDate;                 // (year, month, day, time in seconds)
@@ -194,7 +195,8 @@ float NebulaNoise(vec3 p)
 
 float map(vec3 p) 
 {
-	R(p.xz, iMouse.x*0.008*pi+iTime*0.1);
+	R(p.xz, pointer.x*0.8*pi);
+	R(p.yz, -pointer.y*0.8*pi);
 
 	float NebNoise = abs(NebulaNoise(p/0.5)*0.5);
     
@@ -383,32 +385,32 @@ const vertexShader = `
 
 export default function RipplePlanes() {
   const meshMat = useRef<THREE.ShaderMaterial>(null!);
-  const scene = document.getElementById('scene');
   // const texture = loader.load('assets/material/bg.png');
   const [noiseTexture1, noiseTexture2] = useTexture([
     'assets/material/textu.png',
     'assets/material/floor.png',
   ]);
-  useFrame((state) => {
+  useFrame((state, delta) => {
     const { clock } = state;
-    meshMat.current.uniforms.iResolution.value.set(
-      10,
-      10,
-      2
-      // scene?.clientHeight ?? 1,
-      // scene?.clientWidth ?? 0,
-      // 0
-    );
-    meshMat.current.uniforms.iTime.value = clock.getElapsedTime();
+    if (meshMat.current) {
+      meshMat.current.uniforms.iResolution.value.set(10, 10, 2);
+      // meshMat.current.uniforms.iTime.value = clock.getElapsedTime();
+      easing.damp2(
+        meshMat.current.uniforms.pointer.value,
+        state.pointer,
+        0.2,
+        delta
+      );
+    }
   });
+
   const uniforms = useMemo(
     () => ({
       iTime: { value: 1.0 },
       iResolution: { value: new THREE.Vector3() },
       iChannel0: { value: noiseTexture1 },
-      iChannel1: { value: noiseTexture2 },
       iChannel2: { value: noiseTexture2 },
-      iMouse: { value: new THREE.Vector4() },
+      pointer: { value: new THREE.Vector2() },
     }),
     []
   );
@@ -417,7 +419,7 @@ export default function RipplePlanes() {
       args={[10, 10, 1, 1]}
       position={[0, -2.9, 0]}
       rotation={[Math.PI / 3, 0, 0]}
-      scale={0.4}
+      scale={0.6}
     >
       <shaderMaterial
         ref={meshMat}
