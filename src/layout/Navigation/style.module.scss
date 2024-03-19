@@ -1,0 +1,53 @@
+.wrapper {
+  @apply bg-gray-800 absolute z-10 w-full;
+  .lgMenu {
+    @apply max-w-7xl mx-auto px-2 sm:px-6 lg:px-8;
+    .content {
+      @apply relative flex items-center justify-between h-16;
+      .list {
+        @apply absolute inset-y-0 left-0 flex items-center sm:hidden;
+        .button{
+          @apply inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white;
+          .spanInfo{
+            @apply sr-only;
+          }
+          .svgTag{
+            @apply w-10 h-auto text-white
+          }
+        }
+      }
+      .menuBtn {
+        @apply flex-1 flex items-center justify-center sm:items-stretch sm:justify-start;
+        .content {
+          @apply flex-shrink-0 flex items-center;
+          .lgImg {
+            @apply block lg:hidden h-10 w-auto;
+          }
+          .mdImg {
+            @apply hidden lg:block h-10 w-auto;
+          }
+        }
+        .buttonContent {
+          @apply hidden sm:block sm:ml-6;
+          .buttons {
+            @apply flex space-x-4;
+            .svgTag{
+              @apply w-10 h-auto text-white
+            }
+
+          }
+        }
+      }
+    }
+  }
+  .mdMenu {
+    @apply sm:hidden;
+    content {
+      @apply px-2 pt-2 pb-3 space-y-1;
+    }
+  }
+}
+
+.svgTag{
+  @apply w-10 h-auto text-white
+}
