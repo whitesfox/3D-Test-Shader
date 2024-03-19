@@ -10,6 +10,7 @@ import RipplePlanes from 'componentsForThree/RipplePlane';
 import Rain from 'componentsForThree/Rain';
 import LoadModel from 'componentsForThree/LoadModel';
 import Plasma from 'componentsForThree/Plasma';
+import Quantum from 'componentsForThree/Quantum';
 
 export default function Configurator() {
   const ContextBridge = useContextBridge(ControlContext);
@@ -29,7 +30,8 @@ export default function Configurator() {
           {/* <Floor /> */}
           {/* <OrbitControls /> */}
           {/* <RipplePlanes /> */}
-          <Plasma />
+          {/* <Plasma /> */}
+          <Quantum />
           {/* <Rain /> */}
           {/* <LoadModel modelUrl='assets/model/model.glb' /> */}
         </ContextBridge>
